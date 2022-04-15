@@ -1,9 +1,24 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
+  const [envVars, setEnvVars] = useState<any>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("/api/hello");
+  
+      const vars = await response.json();
+
+      setEnvVars(vars);
+    };
+
+    fetchData().catch(console.error);;
+  }, []);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -16,6 +31,10 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
+        <p className={styles.description}>
+          {JSON.stringify(envVars)}
+        </p>
 
         <p className={styles.description}>
           Get started by editing{' '}
